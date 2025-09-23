@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Banking FAQ Chatbot</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 15px;
+    background: #f9f9f9;
+  }
+  h1 {
+    text-align: center;
+    color: #2c3e50;
+  }
+  #chatbox {
+    border: 1px solid #ddd;
+    background: #fff;
+    padding: 15px;
+    height: 400px;
+    overflow-y: auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    border-radius: 6px;
+  }
+  .message {
+    margin-bottom: 15px;
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    line-height: 1.4;
+  }
+  .user {
+    background-color: #3498db;
+    color: white;
+    margin-left: auto;
+    text-align: right;
+  }
+  .bot {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    margin-right: auto;
+    text-align: left;
+  }
+  #input-form {
+    margin-top: 15px;
+    display: flex;
+  }
+  #query-input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+  }
+  #send-btn {
+    background-color: #3498db;
+    border: none;
+    color: white;
+    font-weight: bold;
+    padding: 0 20px;
+    margin-left: 10px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  #send-btn:hover {
+    background-color: #2980b9;
+  }
+</style>
+</head>
+<body>
+
+<h1>Banking FAQ Chatbot</h1>
+
+<div id="chatbox"></div>
+
+<form id="input-form">
+  <input type="text" id="query-input" placeholder="Ask your banking question..." autocomplete="off" />
+  <button type="submit" id="send-btn">Send</button>
+</form>
+
+<script>
+  const chatbox = document.getElementById('chatbox');
+  const form = document.getElementById('input-form');
+  const input = document.getElementById('query-input');
+
+  function appendMessage(text, sender) {
+    const msg = document.createElement('div');
+    msg.className = 'message ' + sender;
+    msg.textContent = text;
+    chatbox.appendChild(msg);
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const query = input.value.trim();
+    if (!query) return;
+
+    appendMessage(query, 'user');
+    input.value = '';
+    input.disabled = true;
+    document.getElementById('send-btn').disabled = true;
+
+    try {
+      const response = await fetch('http://localhost:5000/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query })
+      });
+
+      if (!response.ok) {
+        appendMessage('Oops! Something went wrong.', 'bot');
+      } else {
+        const data = await response.json();
+        appendMessage(data.response || "Sorry, I don't have an answer.", 'bot');
+      }
+    } catch (err) {
+      appendMessage('Could not connect to server.', 'bot');
+    }
+
+    input.disabled = false;
+    document.getElementById('send-btn').disabled = false;
+    input.focus();
+  });
+
+  input.focus();
+</script>
+
+</body>
+</html>
