@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Finance Management Chatbot</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 2rem auto;
+    max-width: 600px;
+    padding: 0 1rem;
+    background: #f7f9fc;
+  }
+  h1 {
+    text-align: center;
+    color: #2d3e50;
+  }
+  #chatbox {
+    border: 1px solid #ccc;
+    background: white;
+    height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+  }
+  .user-message {
+    text-align: right;
+    margin: 0.5rem 0;
+  }
+  .user-message span {
+    background: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    display: inline-block;
+    max-width: 80%;
+  }
+  .bot-message {
+    text-align: left;
+    margin: 0.5rem 0;
+  }
+  .bot-message span {
+    background: #e4e6eb;
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    display: inline-block;
+    max-width: 80%;
+  }
+  #input-area {
+    display: flex;
+  }
+  #input-area input {
+    flex-grow: 1;
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 25px 0 0 25px;
+    outline: none;
+  }
+  #input-area button {
+    padding: 0.7rem 1.5rem;
+    border: none;
+    background: #007bff;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0 25px 25px 0;
+  }
+  #input-area button:hover {
+    background: #0056b3;
+  }
+</style>
+</head>
+<body>
+
+<h1>Finance Management Chatbot</h1>
+<div id="chatbox"></div>
+
+<div id="input-area">
+  <input type="text" id="userInput" placeholder="Ask me about finance management..." autocomplete="off" />
+  <button onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+  const chatbox = document.getElementById('chatbox');
+  const userInput = document.getElementById('userInput');
+
+  function appendMessage(text, sender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = sender === 'user' ? 'user-message' : 'bot-message';
+    const span = document.createElement('span');
+    span.textContent = text;
+    messageDiv.appendChild(span);
+    chatbox.appendChild(messageDiv);
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const query = userInput.value.trim();
+    if (!query) return;
+
+    appendMessage(query, 'user');
+    userInput.value = '';
+    userInput.disabled = true;
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query })
+      });
+
+      if (!response.ok) {
+        appendMessage("Sorry, something went wrong. Please try again.", 'bot');
+        userInput.disabled = false;
+        userInput.focus();
+        return;
+      }
+
+      const data = await response.json();
+      appendMessage(data.response, 'bot');
+    } catch (error) {
+      appendMessage("Sorry, I couldn't reach the server.", 'bot');
+    }
+
+    userInput.disabled = false;
+    userInput.focus();
+  }
+
+  userInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  // Focus input on load
+  userInput.focus();
+</script>
+
+</body>
+</html>

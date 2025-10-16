@@ -1,0 +1,5 @@
+tan_number,account_holder_name,account_type
+TAN12345,John Doe,savings
+TAN67890,Jane Smith,current
+TAN11121,Alice Johnson,savings
+TAN22232,Bob Brown,current
