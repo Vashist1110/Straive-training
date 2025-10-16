@@ -1,0 +1,5 @@
+flask
+flask_sqlalchemy
+flasgger
+scikit-learn
+mysqlclient

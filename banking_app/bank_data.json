@@ -1,0 +1,51 @@
+{
+  "accounts": [
+    {
+      "account_number": "BANK001000",
+      "name": "Jane Doe",
+      "pan": "ABCDE1234F",
+      "tan": "TAN1234G",
+      "account_type": "Current",
+      "balance": 50000.5
+    },
+    {
+      "account_number": "BANK001001",
+      "name": "John Smith",
+      "pan": "FGHIJ5678K",
+      "tan": null,
+      "account_type": "Savings",
+      "balance": 12000.75
+    },
+    {
+      "account_number": "BANK001002",
+      "name": "vashist",
+      "pan": "CBOPT123",
+      "tan": "TAN123",
+      "account_type": "Current",
+      "balance": 100000.0
+    },
+    {
+      "account_number": "BANK001003",
+      "name": "soumya",
+      "pan": "ABC1234",
+      "tan": null,
+      "account_type": "Savings",
+      "balance": 100.0
+    },
+    {
+      "account_number": "BANK001004",
+      "name": "soumya",
+      "pan": "ABC1234",
+      "tan": "TAN1234",
+      "account_type": "Current",
+      "balance": 100.0
+    }
+  ],
+  "loan_rules": {
+    "Home Loan": "Requires 20% down payment and property documents.",
+    "Education Loan": "Requires acceptance letter from institution.",
+    "Car Loan": "Requires proforma invoice and credit score check.",
+    "Personal Loan": "Requires income proof for last 3 months.",
+    "Business Loan": "Requires Current Account and TAN number, 3 years business history."
+  }
+}
